@@ -1,5 +1,11 @@
-import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
+import { initializeApp, getApps, FirebaseApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+// Firestoreはログインやユーザー登録の実装には使わないが、今後のことを考えて入れておく
+import { getFirestore, Firestore } from 'firebase/firestore'
+import {
+    getAuth,
+    Auth,
+} from "firebase/auth";
 
 const firebaseConfig = {
     apiKey: process.env.NEXT_PUBLIC_APIKEY,
@@ -11,7 +17,21 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
+let firebaseApp: FirebaseApp;
+let auth: Auth;
+let firestore: Firestore;
 
-export { auth };
+if (typeof window !== "undefined" && !getApps().length) {
+    firebaseApp = initializeApp(firebaseConfig);
+    auth = getAuth();
+    firestore = getFirestore();
+}
+
+// If Firebase has already been initialized, use that instance
+else {
+    const app = getApps()[0];
+    auth = getAuth(app);
+    firestore = getFirestore(app);
+}
+
+export { firebaseApp, auth, firestore };

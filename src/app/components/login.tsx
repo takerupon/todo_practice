@@ -1,7 +1,6 @@
 "use client"
-import { useState, useEffect, FormEvent } from 'react';
-import { useRouter } from 'next/navigation'; // 'next/navigation' ではなく 'next/router' です
-import { CloseButton, useDisclosure } from '@chakra-ui/react'
+import { useState, FormEvent } from 'react';
+import { useRouter } from 'next/navigation';  // 修正: 'next/router' に変更
 import {
     Flex,
     Heading,
@@ -11,38 +10,21 @@ import {
     AlertIcon,
     AlertTitle,
     AlertDescription,
+    CloseButton,
+    useDisclosure
 } from '@chakra-ui/react';
-
-type UserInfo = {
-    useremail: string;
-    userpassword: string;
-};
+import { signInWithEmailAndPassword } from "firebase/auth";  // Firebaseの関数を追加
+import { auth } from "../lib/firebase_config";      // あなたのFirebaseの設定ファイルのパス
 
 export const Login = () => {
     const [useremail, setUseremail] = useState<string>('');
     const [userpassword, setUserpassword] = useState<string>('');
-    const [userinfo, setUserinfo] = useState<UserInfo[] | null>(null);
     const [alertMessage, setAlertMessage] = useState<string>('');
     const [successMessage, setSuccessMessage] = useState<string>('');
 
     const Router = useRouter();
 
-    useEffect(() => {
-        getUserInfo();
-    }, []);
-
-    const getUserInfo = async () => {
-        const userInfo = await localStorage.getItem("userInfo");
-        if (userInfo) {
-            setUserinfo(JSON.parse(userInfo));
-        }
-    };
-
-    const {
-        isOpen: isVisible,
-        onClose,
-        onOpen,
-    } = useDisclosure({ defaultIsOpen: false })
+    const { isOpen: isVisible, onClose, onOpen } = useDisclosure({ defaultIsOpen: false });
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
@@ -53,18 +35,16 @@ export const Login = () => {
             return;
         }
 
-        const isAuthenticated = userinfo?.some(
-            (user: UserInfo) =>
-                user.useremail === useremail && user.userpassword === userpassword
-        ) || false;
-
-        if (isAuthenticated) {
+        try {
+            await signInWithEmailAndPassword(auth, useremail, userpassword);  // Firebaseでの認証処理に変更
             setSuccessMessage('Login successful');
             onOpen();
             Router.push("/todo");
-        } else {
-            setAlertMessage('Login failed');
-            onOpen();
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                setAlertMessage('Login failed: ' + error.message);
+                onOpen();
+            }
         }
     }
 
@@ -89,8 +69,17 @@ export const Login = () => {
             <Flex align={"center"} justify={"center"}>
                 <Heading mb={6}> Log In</Heading>
             </Flex>
-                <Input placeholder="sample@sample.com" variant="filled" mb={3} type="email" onChange={(e) => setUseremail}/>
-                <Input placeholder="*********" variant="filled" mb={6} type="password" onChange={(e) => setUserpassword}/>
+                <Input
+                    placeholder="sample@sample.com"
+                    variant="filled"
+                    mb={3} type="email"
+                    onChange={(e) => setUseremail(e.target.value)}/>
+                <Input
+                    placeholder="*********"
+                    variant="filled"
+                    mb={6}
+                    type="password"
+                    onChange={(e) => setUserpassword(e.target.value)}/>
                 <Button onClick={handleSubmit} mb={6} colorScheme="teal" type="submit">
                     Log In
                 </Button>

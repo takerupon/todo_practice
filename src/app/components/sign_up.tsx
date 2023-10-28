@@ -67,7 +67,7 @@ export const SignUp = () => {
             )}
             <Flex direction='column' background="gray.100" padding={12} rounded={6}>
                 <Flex align="center" justify="center">
-                    <Heading mb={6}>Create account</Heading>
+                    <Heading mb={6}>Add account</Heading>
                 </Flex>
                 <Input borderColor='gray.400' placeholder="email address" variant="filled" mb={3} type="email" value={useremail} onChange={(e) => setUseremail(e.target.value)} />
                 <Input borderColor="gray.400" placeholder="password" variant="filled" mb={3} type="password" value={userpassword} onChange={(e) => setUserpassword(e.target.value)} />

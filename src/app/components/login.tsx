@@ -1,6 +1,6 @@
 "use client"
 import { useState, FormEvent } from 'react';
-import { useRouter } from 'next/navigation';  // 修正: 'next/router' に変更
+import { useRouter } from 'next/navigation';
 import {
     Flex,
     Heading,
@@ -14,7 +14,7 @@ import {
     useDisclosure
 } from '@chakra-ui/react';
 import { signInWithEmailAndPassword } from "firebase/auth";  // Firebaseの関数を追加
-import { auth } from "../lib/firebase_config";      // あなたのFirebaseの設定ファイルのパス
+import {firebaseApp, auth } from "../lib/firebase_config";      // あなたのFirebaseの設定ファイルのパス
 
 export const Login = () => {
     const [useremail, setUseremail] = useState<string>('');

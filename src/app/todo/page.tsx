@@ -1,10 +1,10 @@
 "use client"
-import { ToastExample } from '../components/todo'
+import { TodoInput } from '../components/add_todo'
 
 export default function Page() {
   return (
     <>
-      <ToastExample />
+      <TodoInput />
     </>
   )
 }

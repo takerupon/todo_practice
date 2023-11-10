@@ -1,4 +1,5 @@
-import { HStack, Text, IconButton, FC } from '@chakra-ui/react';
+import React, { FC } from 'react';
+import { HStack, Text, IconButton} from '@chakra-ui/react';
 import { FaTrash, FaEdit } from 'react-icons/fa';
 import { Task } from '../types/taskTypes';
 

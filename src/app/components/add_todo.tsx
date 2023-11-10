@@ -1,15 +1,14 @@
-import { useState } from 'react';
+import { FC, useState, } from 'react';
 import { Input, Button, HStack } from '@chakra-ui/react';
-import { firestore } from '../lib/firebase_config';
 
 type TaskInputFormProps = {
   onAddTask: (task: string) => void;
 }
 
-export function TaskInputForm({ onAddTask }: TaskInputFormProps) {
-  const [task, setTask] = useState('');
+const TaskInputForm: FC<TaskInputFormProps> = ({ onAddTask }) => {
+  const [task, setTask] = useState<string>('');
 
-  const handleSubmit = (e: { preventDefault: () => void; }) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (task) {
       onAddTask(task);

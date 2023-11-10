@@ -1,4 +1,5 @@
-import { Box, VStack, Text, FC } from '@chakra-ui/react';
+import React, { FC } from 'react';
+import { Box, VStack, Text } from '@chakra-ui/react';
 import TaskItem from './task_item'; // TaskItemコンポーネントをインポート
 import { Task } from '../types/taskTypes';
 

@@ -1,57 +1,37 @@
-"use client"
-import { useState, FormEvent } from 'react';
-import { useDisclosure } from '@chakra-ui/react';
-import { getFirestore, collection, addDoc, query, onSnapshot, doc, updateDoc, deleteDoc } from "firebase/firestore";
-import { firebaseApp, auth, firestore } from "../lib/firebase_config"; // あなたのFirebaseの設定ファイルのパス
-import { Input, Button, Alert, AlertIcon, AlertTitle, AlertDescription, CloseButton, Flex } from '@chakra-ui/react';
+import { useState } from 'react';
+import { Input, Button, HStack } from '@chakra-ui/react';
+import { firestore } from '../lib/firebase_config';
 
-const addTodo =async (task: string) => {
-  const [alertMessage, setAlertMessage] = useState<string>('');
-  const [successMessage, setSuccessMessage] = useState<string>('');
+type TaskInputFormProps = {
+  onAddTask: (task: string) => void;
+}
 
-  const { isOpen: isVisible, onClose, onOpen } = useDisclosure({ defaultIsOpen: false });
+export function TaskInputForm({ onAddTask }: TaskInputFormProps) {
+  const [task, setTask] = useState('');
 
-
-  try {
-    const docRef = await addDoc(collection(firestore, "todos"), {
-      task,
-      completed: false,
-      createdAt: new Date(),
-  });
-  setSuccessMessage("Todo added successfully");
-  } catch (e) {
-    setAlertMessage("Error adding todo: " + e);
-  }
-  onOpen();
-};
-
-const TodoInput = () => {
-  const [inputValue, setInputValue] = useState<string>('');
-
-  const handleAddTodo = async () => {
-    if(inputValue.trim() === '') return;
-    await addTodo(inputValue.trim());
-    setInputValue('');
+  const handleSubmit = (e: { preventDefault: () => void; }) => {
+    e.preventDefault();
+    if (task) {
+      onAddTask(task);
+      setTask('');
+    }
   };
 
   return (
-    <Flex mt="8" justifyContent="center">
-      <Input
-        value={inputValue}
-        onChange={(e) => setInputValue(e.target.value)}
-        placeholder="ToDoを追加"
-        size="md"
-        width="auto"
-        mr="4"
-      />
-      <Button
-        onClick={handleAddTodo}
-        colorScheme="blue"
-        px="8"
-      >
-        追加
-      </Button>
-    </Flex>
+    <form onSubmit={handleSubmit}>
+      <HStack mt="8">
+        <Input
+          variant="filled"
+          placeholder="新しいタスクを追加..."
+          value={task}
+          onChange={(e) => setTask(e.target.value)}
+        />
+        <Button colorScheme="blue" px="8" type="submit">
+          追加
+        </Button>
+      </HStack>
+    </form>
   );
-};
+}
 
+export default TaskInputForm;

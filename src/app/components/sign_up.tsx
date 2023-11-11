@@ -29,7 +29,6 @@ export const SignUp = () => {
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
-        const auth = getAuth();
 
         if (!useremail || !userpassword) {
             setAlertMessage('No email address or password entered');
@@ -48,8 +47,9 @@ export const SignUp = () => {
                 });
                 setSuccessMessage("Account created successfully");
                 Router.push("/todo");
-            } catch (error: unknown) {
+            } catch (error) {
                 if (error instanceof Error) {
+                    console.error("Error creating user document in Firestore: ", error.message);
                     setAlertMessage(error.message);
                 }
             }

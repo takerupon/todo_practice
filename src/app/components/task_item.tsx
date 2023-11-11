@@ -1,7 +1,7 @@
 // TaskItem.tsx
 import { FC, useState } from 'react';
 import { HStack, Text, IconButton, Checkbox, Tooltip, useBoolean, Input } from '@chakra-ui/react';
-import { FaTrash, FaEdit, FaSave } from 'react-icons/fa';
+import { EditIcon, DeleteIcon, RepeatClockIcon } from '@chakra-ui/icons';
 import { doc, deleteDoc, updateDoc } from 'firebase/firestore';
 import { db } from '../lib/firebase_config';
 import { Task } from '../types/taskTypes';
@@ -13,6 +13,13 @@ interface TaskItemProps {
 const TaskItem: FC<TaskItemProps> = ({ task }) => {
     const [isEditing, setIsEditing] = useBoolean();
     const [newTitle, setNewTitle] = useState<string>(task.title);
+
+    const handleComplete = async (e: { target: { checked: any; }; }) => {
+        const taskDoc = doc(db, 'tasks', task.id);
+        await updateDoc(taskDoc, {
+            completed: e.target.checked
+        });
+    }
 
     const handleEdit = () => {
         setIsEditing.on();
@@ -37,10 +44,19 @@ const TaskItem: FC<TaskItemProps> = ({ task }) => {
             w="full"
             justify="space-between"
             p="4"
+            px={8}
             boxShadow="md"
             _hover={{ bg: "gray.100" }}
+            maxWidth="container.md" // 最大幅を設定
+            marginX="auto" // 左右のマージンを自動に
         >
-        {isEditing ? (
+            <Checkbox
+                isChecked={task.completed}
+                onChange={handleComplete}
+                size="lg"
+                mr={2}
+            />
+            {isEditing ? (
             <Input
                 value={newTitle}
                 onChange={(e) => setNewTitle(e.target.value)}
@@ -48,38 +64,38 @@ const TaskItem: FC<TaskItemProps> = ({ task }) => {
                 autoFocus
             />
             ) : (
-            <Text as={task.completed ? 'del' : undefined}>{task.title}</Text>)}
+            <Text  as={task.completed ? 'del' : undefined}>{task.title}</Text>)}
             <HStack>
                 {isEditing ? (
                     <Tooltip label="Save" hasArrow>
                     <IconButton
-                    icon={<FaSave />}
+                    icon={<RepeatClockIcon />}
                     aria-label="Save Task"
                     onClick={handleSave}
-            />
+                    />
                 </Tooltip>
             ) : (
                 <>
                 <Tooltip label="Edit" hasArrow>
                     <IconButton
-                    icon={<FaEdit />}
+                    icon={<EditIcon />}
                     aria-label="Edit Task"
                     onClick={handleEdit}
-                 />
+                    />
                 </Tooltip>
                 <Tooltip label="Delete" hasArrow bg="red.600">
-                  <IconButton
-                    icon={<FaTrash />}
-                    colorScheme="red"
-                    aria-label="Delete Task"
-                    onClick={handleDelete}
-                  />
+                    <IconButton
+                        icon={<DeleteIcon />}
+                        colorScheme="red"
+                        aria-label="Delete Task"
+                        onClick={handleDelete}
+                    />
                 </Tooltip>
-              </>
+                </>
             )}
-          </HStack>
+            </HStack>
         </HStack>
-      );
+        );
     };
 
 export default TaskItem;

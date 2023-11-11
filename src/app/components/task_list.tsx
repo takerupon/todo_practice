@@ -1,33 +1,39 @@
-import React, { FC } from 'react';
+// TaskList.tsx
+import { useEffect, useState, FC } from 'react';
 import { Box, VStack, Text } from '@chakra-ui/react';
-import TaskItem from './task_item'; // TaskItemコンポーネントをインポート
+import TaskItem from './task_item';
+import { collection, query, orderBy, onSnapshot } from 'firebase/firestore';
+import { db } from '../lib/firebase_config';
 import { Task } from '../types/taskTypes';
 
-interface TaskListProps {
-    tasks: Task[];
-    onUpdateTask: (taskId: string) => void;
-    onDeleteTask: (taskId: string) => void;
-}
+const TaskList: FC = () => {
+    const [tasks, setTasks] = useState<Task[]>([]);
 
-const TaskList: FC<TaskListProps> = ({ tasks, onUpdateTask, onDeleteTask }) => {
+    useEffect(() => {
+        const q = query(collection(db, 'tasks'), orderBy('createdAt', 'desc'));
+
+        const unsubscribe = onSnapshot(q, (snapshot) => {
+        const tasksFromFirestore = snapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data()
+        }) as Task);
+        setTasks(tasksFromFirestore);
+        });
+
+        return () => unsubscribe();
+    }, []);
+
     return (
-    <Box mt="8">
+        <Box mt="8">
         {tasks.length ? (
-        <VStack spacing="4">
-            {tasks.map((task) => (
-                <TaskItem
-                    key={task.id}
-                    task={task}
-                    onUpdateTask={onUpdateTask}
-                    onDeleteTask={onDeleteTask}
-                />
-                ))}
-        </VStack>
+            <VStack spacing="4">
+            {tasks.map(task => <TaskItem key={task.id} task={task} />)}
+            </VStack>
         ) : (
-        <Text>タスクはまだありません。</Text>
+            <Text>タスクはまだありません。</Text>
         )}
-    </Box>
+        </Box>
     );
-};
+    };
 
 export default TaskList;

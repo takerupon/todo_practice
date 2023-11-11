@@ -1,5 +1,4 @@
 import { initializeApp, getApps, FirebaseApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
 // Firestoreはログインやユーザー登録の実装には使わないが、今後のことを考えて入れておく
 import { getFirestore, Firestore } from 'firebase/firestore'
 import {
@@ -17,21 +16,11 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-let firebaseApp: FirebaseApp;
-let auth: Auth;
-let firestore: Firestore;
-
-if (typeof window !== "undefined" && !getApps().length) {
-    firebaseApp = initializeApp(firebaseConfig);
-    auth = getAuth();
-    firestore = getFirestore();
+if (!getApps().length) {
+    initializeApp(firebaseConfig);
 }
 
-// If Firebase has already been initialized, use that instance
-else {
-    const app = getApps()[0];
-    auth = getAuth(app);
-    firestore = getFirestore(app);
-}
+const app = initializeApp(firebaseConfig);
 
-export { firebaseApp, auth, firestore };
+export const auth = getAuth(app);
+export const db = getFirestore(app);

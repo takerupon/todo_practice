@@ -14,7 +14,7 @@ import {
     useDisclosure
 } from '@chakra-ui/react';
 import { signInWithEmailAndPassword } from "firebase/auth";  // Firebaseの関数を追加
-import {firebaseApp, auth } from "../lib/firebase_config";      // あなたのFirebaseの設定ファイルのパス
+import { auth } from "../lib/firebase_config";      // あなたのFirebaseの設定ファイルのパス
 
 export const Login = () => {
     const [useremail, setUseremail] = useState<string>('');

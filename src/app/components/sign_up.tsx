@@ -15,7 +15,7 @@ import {
 } from '@chakra-ui/react';
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth"; // Firebaseのインポート
 import {doc, setDoc} from "firebase/firestore"; // Firebaseのインポート
-import { firebaseApp, auth, firestore } from "../lib/firebase_config"; // あなたのFirebaseの設定ファイルのパス
+import { auth, db } from "../lib/firebase_config"; // あなたのFirebaseの設定ファイルのパス
 
 export const SignUp = () => {
     const [useremail, setUseremail] = useState<string>('');
@@ -41,10 +41,10 @@ export const SignUp = () => {
                 const user = userCredential.user;
 
                 // Firestoreにユーザードキュメントを作成
-                const userRef = doc(firestore, "users", user.uid); // UIDをドキュメントIDとして使用
+                const userRef = doc(db, "users", user.uid); // UIDをドキュメントIDとして使用
                 await setDoc(userRef, {
                     email: user.email, // メールアドレスを保存
-                    boards: [] // 空のボード配列を初期値として設定
+                    tasks: [] // 空のボード配列を初期値として設定
                 });
                 setSuccessMessage("Account created successfully");
                 Router.push("/todo");

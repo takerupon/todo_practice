@@ -1,19 +1,30 @@
-import { FC, useState, } from 'react';
+import { FC, FormEvent, useState } from 'react';
 import { Input, Button, HStack } from '@chakra-ui/react';
+import { doc, setDoc, serverTimestamp } from "firebase/firestore";
+import { db } from '../lib/firebase_config';
 
-type TaskInputFormProps = {
-  onAddTask: (task: string) => void;
-}
+const TaskInputForm: FC = () => {
+  const [taskTitle, setTaskTitle] = useState<string>('');
 
-const TaskInputForm: FC<TaskInputFormProps> = ({ onAddTask }) => {
-  const [task, setTask] = useState<string>('');
+  const addTaskToFirestore = async () => {
+    if (!taskTitle) return;
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (task) {
-      onAddTask(task);
-      setTask('');
+    try {
+      const docRef = doc(db, 'tasks', taskTitle);
+      await setDoc(docRef, {
+        title: taskTitle,
+        completed: false,
+        createdAt: serverTimestamp()
+      });
+      setTaskTitle(''); // タスク追加後、入力フィールドをクリア
+    } catch (error) {
+      console.error("Error adding task to Firestore: ", error);
     }
+  };
+
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    addTaskToFirestore();
   };
 
   return (
@@ -22,15 +33,15 @@ const TaskInputForm: FC<TaskInputFormProps> = ({ onAddTask }) => {
         <Input
           variant="filled"
           placeholder="新しいタスクを追加..."
-          value={task}
-          onChange={(e) => setTask(e.target.value)}
+          value={taskTitle}
+          onChange={(e) => setTaskTitle(e.target.value)}
         />
-        <Button colorScheme="blue" px="8" type="submit">
+        <Button colorScheme="teal" px="8" type="submit">
           追加
         </Button>
       </HStack>
     </form>
   );
-}
+};
 
 export default TaskInputForm;

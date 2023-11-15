@@ -2,15 +2,18 @@
 import { useEffect, useState } from 'react';
 import TaskInputForm from '../../components/add_todo';
 import TaskList from '../../components/task_list';
-import { Task } from '../../common/types/taskTypes';
+import Header from '@/app/header';
+import RootLayout from '@/app/layout';
 
 const TodoPage = () => {
 
   return (
-    <div>
+    <>
+    <RootLayout showLogoutButton={true}>
       <TaskInputForm />
       <TaskList />
-    </div>
+    </RootLayout>
+    </>
   );
 };
 

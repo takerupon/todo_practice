@@ -1,7 +1,12 @@
 "useClient";
 import {Box, Flex, Button, Text, useColorModeValue} from '@chakra-ui/react';
+import { LogOut } from './components/logout';
 
-export default function Header() {
+type HeaderProps = {
+    showLogoutButton: boolean;
+}
+
+export default function Header({showLogoutButton}: HeaderProps) {
     return (
         <Flex
             as="header"
@@ -21,9 +26,9 @@ export default function Header() {
 
             <Box flex={1} textAlign={"right"}>
                 {/* 他のナビゲーションリンクをここに追加 */}
-                <Button variant="outline" colorScheme="teal" mr={4}>
-                    Log Out
-                </Button>
+                {showLogoutButton &&(
+                    <LogOut />
+                )}
             </Box>
         </Flex>
     );

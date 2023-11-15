@@ -1,14 +1,19 @@
 "useClient";
+import { FormEvent } from "react";
 import { signOut } from "firebase/auth";
 import { auth } from "../common/lib/firebase_config"
 import { useRouter } from "next/navigation";
 import { Button } from "@chakra-ui/react";
 
-export const SignOut = () => {
-    const handleSignOut = async () => {
+export const LogOut = () => {
+    const Router = useRouter();
+
+    const handleSignOut = async (e: FormEvent) => {
+        e.preventDefault();
+
         try {
             await signOut(auth);
-            useRouter().push("/");
+            Router.push("/");
         } catch (error: unknown) {
             if (error instanceof Error) {
                 console.error(error.message);

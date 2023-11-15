@@ -64,7 +64,7 @@ const TaskItem: FC<TaskItemProps> = ({ task }) => {
                 autoFocus
             />
             ) : (
-            <Text  as={task.completed ? 'del' : undefined}>{task.title}</Text>)}
+            <Text as={task.completed ? 'del' : undefined}>{task.title}</Text>)}
             <HStack>
                 {isEditing ? (
                     <Tooltip label="Save" hasArrow>

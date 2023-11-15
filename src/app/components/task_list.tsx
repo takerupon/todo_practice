@@ -40,7 +40,7 @@ const TaskList: FC = () => {
             {tasks.map(task => <TaskItem key={task.id} task={task} />)}
             </VStack>
         ) : (
-            <Text>タスクはまだありません。</Text>
+            <Text textAlign={"center"}>タスクはまだありません。</Text>
         )}
         </Box>
     );

@@ -3,8 +3,8 @@ import { useEffect, useState, FC } from 'react';
 import { Box, VStack, Text } from '@chakra-ui/react';
 import TaskItem from './task_item';
 import { collection, query, orderBy, onSnapshot, where } from 'firebase/firestore';
-import { db, auth } from '../lib/firebase_config';
-import { Task } from '../types/taskTypes';
+import { db, auth } from '../common/lib/firebase_config';
+import { Task } from '../common/types/taskTypes';
 
 const TaskList: FC = () => {
     const [tasks, setTasks] = useState<Task[]>([]);

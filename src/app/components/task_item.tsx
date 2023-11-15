@@ -3,8 +3,8 @@ import { FC, useState } from 'react';
 import { HStack, Text, IconButton, Checkbox, Tooltip, useBoolean, Input } from '@chakra-ui/react';
 import { EditIcon, DeleteIcon, RepeatClockIcon } from '@chakra-ui/icons';
 import { doc, deleteDoc, updateDoc } from 'firebase/firestore';
-import { db } from '../lib/firebase_config';
-import { Task } from '../types/taskTypes';
+import { db } from '../common/lib/firebase_config';
+import { Task } from '../common/types/taskTypes';
 
 interface TaskItemProps {
     task: Task;

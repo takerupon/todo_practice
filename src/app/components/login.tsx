@@ -14,7 +14,7 @@ import {
     useDisclosure
 } from '@chakra-ui/react';
 import { signInWithEmailAndPassword } from "firebase/auth";  // Firebaseの関数を追加
-import { auth } from "../lib/firebase_config";      // あなたのFirebaseの設定ファイルのパス
+import { auth } from "../common/lib/firebase_config";      // あなたのFirebaseの設定ファイルのパス
 
 export const Login = () => {
     const [useremail, setUseremail] = useState<string>('');
@@ -39,7 +39,7 @@ export const Login = () => {
             await signInWithEmailAndPassword(auth, useremail, userpassword);  // Firebaseでの認証処理に変更
             setSuccessMessage('Login successful');
             onOpen();
-            Router.push("/todo");
+            Router.push("features/todo");
         } catch (error: unknown) {
             if (error instanceof Error) {
                 setAlertMessage('Login failed: ' + error.message);
@@ -83,7 +83,7 @@ export const Login = () => {
                 <Button onClick={handleSubmit} mb={6} colorScheme="teal" type="submit">
                     Log In
                 </Button>
-            <Button mb={6} colorScheme="teal" onClick={() => Router.push('/create_account')}>
+            <Button mb={6} colorScheme="teal" onClick={() => Router.push('features/sign_up')}>
                 Sign Up
             </Button>
         </Flex>

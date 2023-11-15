@@ -1,7 +1,7 @@
 import { FC, FormEvent, useState } from 'react';
 import { Input, Button, HStack, Flex } from '@chakra-ui/react';
 import { doc, setDoc, addDoc, collection, serverTimestamp } from "firebase/firestore";
-import { db, auth } from '../lib/firebase_config';
+import { db, auth } from '../common/lib/firebase_config';
 import { FirebaseError } from '@firebase/app';
 
 const TaskInputForm: FC = () => {

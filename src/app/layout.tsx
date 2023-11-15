@@ -2,6 +2,8 @@ import { Providers } from './providers';
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import Header from './header'
+import Footer from './footer';
+import { Box } from '@chakra-ui/react';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -19,8 +21,13 @@ export default function RootLayout({
     <html lang="ja">
       <body className={inter.className}>
         <Providers>
-          <Header />
-          {children}
+          <Box minHeight="100vh" display="flex" flexDirection="column">
+            <Header />
+              <Box as='main'>
+                {children}
+              </Box>
+            <Footer />
+          </Box>
         </Providers>
       </body>
     </html>

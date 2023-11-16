@@ -1,4 +1,4 @@
-"useClient";
+"use client";
 import { FormEvent } from "react";
 import { signOut } from "firebase/auth";
 import { auth } from "../common/lib/firebase_config"
